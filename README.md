@@ -1,98 +1,116 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Content Summarizer with Email Notification
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A NestJS application that uses **Google Gemini AI** to summarize long text content and automatically sends the summary via email using **AWS SES** and **Trigger.dev**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- 📝 **AI-Powered Summarization** - Uses Google Gemini 2.5 Flash API to summarize long content
+- 📧 **Email Delivery** - Sends formatted HTML emails via AWS SES
+- ⚡ **Background Jobs** - Powered by Trigger.dev for reliable task execution
+- 🎨 **Beautiful Email Templates** - Professional HTML email design with summary and original content
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tech Stack
 
-## Project setup
+- **NestJS** - Backend framework
+- **Trigger.dev** - Background job processing
+- **Google Gemini AI** - Text summarization
+- **AWS SES** - Email delivery service
 
+## Setup
+
+### 1. Install Dependencies
 ```bash
-$ pnpm install
+pnpm install
 ```
 
-## Compile and run the project
+### 2. Configure Environment Variables
+Create a `.env` file in the root directory:
 
-```bash
-# development
-$ pnpm run start
+```env
+# App
+PORT=5000
 
-# watch mode
-$ pnpm run start:dev
+# Trigger.dev
+TRIGGER_SECRET_KEY=your_trigger_secret_key
+TRIGGER_API_URL=https://api.trigger.dev
 
-# production mode
-$ pnpm run start:prod
+# AWS SES Configuration
+AWS_REGION=ap-southeast-1
+AWS_ACCESS_KEY_ID=your_access_key_id
+AWS_SECRET_ACCESS_KEY=your_secret_access_key
+AWS_SES_FROM_EMAIL=your-email@example.com
+
+# Google Gemini API
+GEMINI_API_KEY=your_gemini_api_key
 ```
 
-## Run tests
+### 3. Get API Keys
 
+- **Trigger.dev**: Sign up at [cloud.trigger.dev](https://cloud.trigger.dev)
+- **Gemini API**: Get free key at [Google AI Studio](https://aistudio.google.com/app/apikey)
+- **AWS SES**: Set up in [AWS Console](https://console.aws.amazon.com/ses)
+
+## Running the Application
+
+You need to run **2 terminals**:
+
+**Terminal 1** - Start Trigger.dev dev server:
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+pnpm dlx trigger.dev@latest dev
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+**Terminal 2** - Start NestJS app:
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+pnpm start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## API Usage
 
-## Resources
+### Summarize and Email Endpoint
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+POST http://localhost:5000/summary
+Content-Type: application/json
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+{
+  "description": "Your long text content here that needs to be summarized...",
+  "to": "recipient@example.com",
+  "subject": "Content Summary Report"
+}
+```
 
-## Support
+**Response:**
+```json
+{
+  "message": "Summarization and email task triggered successfully"
+}
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## How It Works
 
-## Stay in touch
+1. **User sends POST request** with long text content and recipient email
+2. **Summarization Task** - Google Gemini AI generates a concise summary
+3. **Email Task** - AWS SES sends a formatted HTML email with:
+   - Summary section (highlighted)
+   - Original content section
+   - Professional styling
+4. **User receives email** with the summarized content
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Project Structure
+
+```
+src/
+├── module/
+│   ├── app/              # Main application module
+│   ├── ses/              # AWS SES email service
+│   └── trigger/          # Trigger.dev tasks
+│       └── tasks/
+│           ├── send-email.task.ts
+│           ├── summarize-content.task.ts
+│           └── summarize-and-email.task.ts
+└── templates/            # Email HTML templates
+```
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+MIT
