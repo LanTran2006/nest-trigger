@@ -56,7 +56,6 @@ export const sendEmailTask = task({
       console.log('Email sent successfully');
       return {
         success: true,
-        messageId: response.MessageId,
         to: payload.to,
       };
     } catch (error) {

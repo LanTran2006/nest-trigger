@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int         @id @default(autoincrement())
+  name             String
+  email            String      @unique
+  totalSpent       Float       @default(0)
+  lastPurchaseDate DateTime?
+  isActive         Boolean     @default(true)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  promotions       UserPromotion[]
+}
+
+model Promotion {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  minSpent    Float    @default(0)
+  isActive    Boolean  @default(true)
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users       UserPromotion[]
+}
+
+model UserPromotion {
+  userId      Int
+  promotionId Int
+  assignedAt  DateTime @default(now())
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  promotion   Promotion @relation(fields: [promotionId], references: [id], onDelete: Cascade)
+
+  @@id([userId, promotionId])
+}
